@@ -1,0 +1,7 @@
+{
+  "name": "مستكشف المواقع الذكي",
+  "description": "مساعد اكتشاف محلي ذكي مدعوم بـ Gemini 2.5 Flash وخرائط Google للعثور على أفضل الأماكن والمطاعم والمعالم من حولك.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}
