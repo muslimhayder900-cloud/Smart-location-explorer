@@ -10,8 +10,9 @@ export const callGeminiWithMaps = async (
   const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
   
   const config: any = {
-    tools: [{ googleMaps: {} }],
-    systemInstruction: "أنت مساعد ذكي متخصص في استكشاف المواقع المحلية. يجب أن تكون جميع إجاباتك باللغة العربية الواضحة. قدم توصيات محددة بناءً على بيانات خرائط جوجل.",
+    // دمج بحث جوجل مع الخرائط للحصول على أفضل النتائج
+    tools: [{ googleMaps: {} }, { googleSearch: {} }],
+    systemInstruction: "أنت مساعد ذكي متخصص في استكشاف المواقع المحلية. استخدم أدوات الخرائط والبحث لتقديم أدق المعلومات عن الأماكن. يجب أن تكون جميع إجاباتك باللغة العربية. عند ذكر أماكن، اذكر تفاصيل مفيدة مثل العنوان أو ميزة خاصة.",
   };
 
   if (location) {
@@ -27,7 +28,7 @@ export const callGeminiWithMaps = async (
 
   try {
     const response = await ai.models.generateContent({
-      model: "gemini-2.5-flash", // استخدام اسم النموذج الصحيح لدعم الخرائط
+      model: "gemini-2.5-flash", 
       contents: prompt,
       config: config,
     });
@@ -41,6 +42,13 @@ export const callGeminiWithMaps = async (
           maps: {
             uri: chunk.maps.uri,
             title: chunk.maps.title
+          }
+        };
+      } else if (chunk.web) {
+        return {
+          web: {
+            uri: chunk.web.uri,
+            title: chunk.web.title
           }
         };
       }
